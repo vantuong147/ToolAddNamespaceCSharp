@@ -15,7 +15,7 @@ def simple_find_out_class_lines(file_path):
     end_bracket = 0
     file_data = []
     is_had_namespace = False
-    with open(file_path, 'r') as file:
+    with open(file_path, 'r', encoding='utf-8', errors='replace') as file:
         for i, line in enumerate(file, start=1):
             file_data.append(line)
             if '{' in line:
@@ -65,22 +65,22 @@ def generate_namespaced_code(root_folder, namespace_prefix):
                 file_data.insert(index+1,  "namespace " + namespace +"{\n")
                 file_data.append("}")
                 break
-        with open(csFile, "w") as file:
+        with open(csFile, "w", encoding='utf-8', errors='replace') as file:
             for item in file_data:
                 file.write(item)
 
     for csFile in all_csharp_files:
         file_data = []
-        with open(csFile, 'r') as file:
+        with open(csFile, 'r', encoding='utf-8', errors='replace') as file:
             for i, line in enumerate(file, start=1):
                 file_data.append(line)
         for namespace in namespace_added:
             file_data.insert(0, "using "+namespace+";\n")
-        with open(csFile, "w") as file:
+        with open(csFile, "w", encoding='utf-8', errors='replace') as file:
             for item in file_data:
                 file.write(item)
             
 
-folder = r"E:\\Lab\\Unity\\Pipes Flood Puzzle Customed test"
-namespace_prefix = "PMP_Game.org"
-#generate_namespaced_code(folder, namespace_prefix)
+folder = r"E:\\Lab\\Unity\\MazeCustom\\MazeGameCustom\Assets\Animals Match Pack Customed"
+namespace_prefix = "AMP_Game.org"
+generate_namespaced_code(folder, namespace_prefix)
