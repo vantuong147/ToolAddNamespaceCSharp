@@ -52,19 +52,27 @@ def generate_namespaced_code(root_folder, namespace_prefix):
         # print(start_bracket,end_bracket)
         # print(file_data[start_bracket])
         # print(file_data[end_bracket])
-        for i in range(1, start_bracket):
-            index = start_bracket - i
-            line = file_data[index]
-            if "using" in line:
-                print("first using line:",line)
-                print(file_data[index+1])
-                parent_directory = os.path.basename(os.path.dirname(csFile))
-                namespace = f"{namespace_prefix}.{parent_directory}"
-                if (namespace not in namespace_added and "Editor" not in namespace):
-                    namespace_added.append(namespace)
-                file_data.insert(index+1,  "namespace " + namespace +"{\n")
-                file_data.append("}")
-                break
+        # for i in range(1, start_bracket):
+        #     index = start_bracket - i
+        #     line = file_data[index]
+        #     if "using" in line:
+        #         print("first using line:",line)
+        #         print(file_data[index+1])
+        #         parent_directory = os.path.basename(os.path.dirname(csFile))
+        #         namespace = f"{namespace_prefix}.{parent_directory}"
+        #         if (namespace not in namespace_added and "Editor" not in namespace):
+        #             namespace_added.append(namespace)
+        #         file_data.insert(index+1,  "namespace " + namespace +"{\n")
+        #         file_data.append("}")
+        #         break
+
+        parent_directory = os.path.basename(os.path.dirname(csFile))
+        namespace = f"{namespace_prefix}.{parent_directory}"
+        if (namespace not in namespace_added and "Editor" not in namespace):
+            namespace_added.append(namespace)
+        file_data.insert(0,  "namespace " + namespace +"{\n")
+        file_data.append("}")
+
         with open(csFile, "w", encoding='utf-8', errors='replace') as file:
             for item in file_data:
                 file.write(item)
