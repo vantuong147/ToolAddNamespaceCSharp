@@ -83,7 +83,7 @@ def generate_namespaced_code(root_folder, namespace_prefix):
             for i, line in enumerate(file, start=1):
                 file_data.append(line)
         for namespace in namespace_added:
-            file_data.insert(0, "using "+namespace+";\n")
+            file_data.insert(2, "using "+namespace+";\n")
         with open(csFile, "w", encoding='utf-8', errors='replace') as file:
             for item in file_data:
                 file.write(item)
