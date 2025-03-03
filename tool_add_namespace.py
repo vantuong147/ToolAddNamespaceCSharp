@@ -15,16 +15,18 @@ def simple_find_out_class_lines(file_path):
     end_bracket = 0
     file_data = []
     is_had_namespace = False
+    is_preline_using = True
     with open(file_path, 'r', encoding='utf-8', errors='replace') as file:
         for i, line in enumerate(file, start=1):
             file_data.append(line)
-            if '{' in line:
-                if start_bracket == 0:
-                    start_bracket = i-1
+            if 'using' in line and is_preline_using:
+                start_bracket = i
             if '}' in line:
                 end_bracket = i-1
             if "namespace " in line:
                 is_had_namespace = True
+            if line.strip() != '' and "using" not in line:
+                is_preline_using = False
     return start_bracket, end_bracket, file_data, is_had_namespace
 
 # main function
@@ -67,10 +69,11 @@ def generate_namespaced_code(root_folder, namespace_prefix):
         #         break
 
         parent_directory = os.path.basename(os.path.dirname(csFile))
-        namespace = f"{namespace_prefix}.{parent_directory}"
+        # namespace = f"{namespace_prefix}.{parent_directory}"
+        namespace = f"{namespace_prefix}"
         if (namespace not in namespace_added and "Editor" not in namespace):
             namespace_added.append(namespace)
-        file_data.insert(0,  "namespace " + namespace +"{\n")
+        file_data.insert(start_bracket,  "namespace " + namespace +"{\n")
         file_data.append("}")
 
         with open(csFile, "w", encoding='utf-8', errors='replace') as file:
@@ -89,6 +92,6 @@ def generate_namespaced_code(root_folder, namespace_prefix):
                 file.write(item)
             
 
-folder = r"E:\\Lab\\Unity\\MazeCustom\\MazeGameCustom\Assets\Animals Match Pack Customed"
-namespace_prefix = "AMP_Game.org"
+folder = r"E:\\Lab\\Tools\Block-Puzzle-Magic\\Block-Puzzle-Magic\\Utilities"
+namespace_prefix = "Minigames.BlockPuzzleMagic"
 generate_namespaced_code(folder, namespace_prefix)
